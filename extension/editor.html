@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StepCrumbs – Editor</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="brand"><img src="icons/icon32.png" alt="" width="22" height="22"><span>StepCrumbs</span></div>
+    <select id="projectSel" aria-label="Project"></select>
+    <button id="btnManage" class="btn ghost" title="Open, rename, back up or delete projects"><span data-i="folder"></span>Projects</button>
+    <div class="spacer"></div>
+    <span id="saveState" class="muted small">All changes saved</span>
+    <button id="btnClaude" class="btn ai" title="Export for Claude, then paste Claude's reply"><span data-i="sparkle"></span>Write with Claude</button>
+    <button id="btnPreview" class="btn"><span data-i="eye"></span>Preview</button>
+    <button id="btnCarousel" class="btn primary"><span data-i="download"></span>LinkedIn PDF</button>
+  </header>
+
+  <div class="layout">
+    <aside class="side">
+      <section class="card pad">
+        <h2>Project</h2>
+        <label class="lbl" for="pTitle">Title</label>
+        <input id="pTitle" type="text" maxlength="140" placeholder="e.g. Hosting a static site on AWS S3 + CloudFront">
+        <div id="titleSuggest" class="suggest hidden"></div>
+        <label class="lbl" for="pSummary">What did you build, and why? <button id="draftSummary" class="linkbtn" type="button">Draft it for me</button></label>
+        <textarea id="pSummary" rows="5" placeholder="2–3 sentences. Used as your guide intro, LinkedIn cover slide and post."></textarea>
+        <label class="lbl" for="pTags">Tech stack / tags</label>
+        <input id="pTags" type="text" placeholder="AWS, Terraform, Proxmox VE…">
+        <div id="detected" class="detected"></div>
+        <label class="lbl" for="pCategory">Project type <span class="muted" style="font-weight:500">sets wording &amp; hashtags</span></label>
+        <select id="pCategory"></select>
+        <div class="grid2">
+          <div><label class="lbl" for="pAuthor">Your name</label><input id="pAuthor" type="text" placeholder="Aayush Patel"></div>
+          <div><label class="lbl" for="pLink">Website / GitHub</label><input id="pLink" type="text" placeholder="yoursite.com"></div>
+        </div>
+        <div class="grid2">
+          <div><label class="lbl" for="pAccent">Arrow &amp; accent color</label><input id="pAccent" type="color"></div>
+          <div><label class="lbl" for="pTheme">LinkedIn slide theme</label>
+            <select id="pTheme"><option value="light">Light (printable)</option><option value="dark">Dark</option></select></div>
+        </div>
+      </section>
+
+      <section class="card pad">
+        <h2>SOP details</h2>
+        <p class="muted small">Shown at the top of your guide and SOP. Claude fills empty fields when you import its reply; anything you type stays yours.</p>
+        <label class="lbl" for="sPurpose">Purpose</label>
+        <textarea id="sPurpose" rows="2" placeholder="What this procedure achieves"></textarea>
+        <label class="lbl" for="sAudience">Who it's for</label>
+        <input id="sAudience" type="text" placeholder="e.g. Homelab beginners with one spare PC">
+        <label class="lbl" for="sPrereq">Before you start <span class="muted" style="font-weight:500">one per line</span></label>
+        <textarea id="sPrereq" rows="3" placeholder="Proxmox VE installed&#10;Ubuntu ISO uploaded"></textarea>
+        <label class="lbl" for="sVerify">How to check it worked <span class="muted" style="font-weight:500">one per line</span></label>
+        <textarea id="sVerify" rows="2" placeholder="The VM boots to the login screen"></textarea>
+        <label class="lbl" for="sEnv">Tested on</label>
+        <input id="sEnv" type="text" placeholder="e.g. Proxmox VE 8.2.4 on a Dell OptiPlex 7050">
+        <div id="envSuggest" class="detected"></div>
+        <div class="grid2">
+          <div><label class="lbl" for="sDiff">Difficulty</label>
+            <select id="sDiff"><option value="">—</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+          <div><label class="lbl" for="sVersion">Version</label><input id="sVersion" type="text" placeholder="1.0"></div>
+        </div>
+      </section>
+
+      <section class="card pad">
+        <h2>At a glance</h2>
+        <div id="stats" class="stats"></div>
+      </section>
+
+      <section class="card pad">
+        <h2><span data-i="shield"></span>Privacy check</h2>
+        <p class="muted small">Review before you publish. Screenshots can also show IPs, hostnames and serials, so use <b>Blur</b> on those.</p>
+        <ul id="privacy" class="privacy"></ul>
+      </section>
+
+      <section class="card pad">
+        <h2>Export</h2>
+        <div class="exports">
+          <button class="exp" data-x="carousel"><b>LinkedIn carousel (PDF)</b><span>4:5 slides with zoomed screenshots. Post it as a LinkedIn “document”.</span></button>
+          <div class="exp exp-video">
+            <button class="exp-main" data-x="video"><b>Short video (MP4)</b><span>Zooms into each click, with captions. Great for the LinkedIn feed.</span></button>
+            <select id="videoSize" aria-label="Video size">
+              <option value="portrait">4:5 feed</option><option value="vertical">9:16 vertical</option><option value="landscape">16:9 wide</option>
+            </select>
+          </div>
+          <button class="exp" data-x="post"><b>LinkedIn post text</b><span>A ready-to-edit caption, written in your voice.</span></button>
+          <button class="exp" data-x="sop"><b>SOP (print / PDF)</b><span>Formal, printable procedure: purpose, checklist, steps, troubleshooting, revision history.</span></button>
+          <button class="exp" data-x="print"><b>Guide (print / PDF)</b><span>Friendly blog-style guide. Choose “Save as PDF”.</span></button>
+          <button class="exp" data-x="html"><b>Website page (single .html)</b><span>One self-contained file with images built in.</span></button>
+          <button class="exp" data-x="kit"><b>Website kit (.zip)</b><span>Guide, SOP, README.md, images, carousel PDF and post text.</span></button>
+          <button class="exp" data-x="backup"><b>Backup project (.json)</b><span>Everything incl. screenshots, so you can restore it later.</span></button>
+        </div>
+        <div class="row gap">
+          <label class="btn sm"><input id="importFile" type="file" accept=".json,application/json" hidden>Import backup</label>
+          <button id="deleteProject" class="btn sm danger">Delete project</button>
+        </div>
+      </section>
+    </aside>
+
+    <main>
+      <div class="mainhead">
+        <div>
+          <h1 id="hTitle">Untitled</h1>
+          <p class="muted small">Click a title to edit it. <code>**bold**</code> and <code>`code`</code> work. Use ★ to choose which steps go in the carousel and video.</p>
+        </div>
+        <button id="addNoteTop" class="btn sm"><span data-i="note"></span>Add note at start</button>
+      </div>
+      <div id="timeline" class="timeline"></div>
+      <div id="emptyState" class="empty hidden">
+        <h3>No steps yet</h3>
+        <p class="muted">Open the StepCrumbs side panel (click the toolbar icon), press <b>Start recording</b>, and work through your setup.</p>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="postDlg">
+    <form method="dialog">
+      <h3>LinkedIn post</h3>
+      <p class="muted small" id="postNote">Edit it so it sounds like you, then attach the carousel PDF (or the video) on LinkedIn.</p>
+      <textarea id="postText" rows="18"></textarea>
+      <p id="postTells" class="tells hidden"></p>
+      <div class="row end gap">
+        <button id="postTemplate" class="btn" type="button">Use simple template</button>
+        <button class="btn" value="close">Close</button>
+        <button id="copyPost" class="btn primary" type="button">Copy</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="manageDlg" class="wide">
+    <form method="dialog">
+      <h3><span data-i="folder"></span> Your projects</h3>
+      <p class="muted small" id="mUsage">Everything is stored in this browser only.</p>
+      <div class="mtable-wrap">
+        <table class="mtable">
+          <thead><tr>
+            <th><input type="checkbox" id="mAll" aria-label="Select all projects"></th>
+            <th>Project</th><th>Steps</th><th>Last edited</th><th></th>
+          </tr></thead>
+          <tbody id="mRows"></tbody>
+        </table>
+      </div>
+      <p class="muted small">Deleting removes the project and its screenshots from this browser. You get a few seconds to undo. Back up anything you want to keep first.</p>
+      <div class="row gap" style="margin-top:12px">
+        <button type="button" id="mDelete" class="btn danger" disabled><span data-i="trash"></span>Delete selected</button>
+        <div class="spacer"></div>
+        <button class="btn" value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="claudeDlg" class="wide">
+    <form method="dialog" id="claudeForm">
+      <h3><span data-i="sparkle"></span> Write it up with Claude</h3>
+      <p class="muted small">StepCrumbs recorded the facts: exact labels, commands, screenshots and your notes. Claude turns them into a clear guide, SOP and LinkedIn post, using what you tell it about your experience. Nothing leaves your PC until you attach the pack in Claude yourself.</p>
+      <ol class="cflow">
+        <li>
+          <b>Export the pack</b>
+          <span class="muted small">Every step, your notes, and the screenshots with your blurs and redactions applied.</span>
+          <div class="row gap wrap">
+            <button type="button" id="cExport" class="btn primary"><span data-i="download"></span>Download pack (.zip)</button>
+            <button type="button" id="cCopy" class="btn">Copy as text (no screenshots)</button>
+          </div>
+          <p id="cPrivacy" class="muted small"></p>
+        </li>
+        <li>
+          <b>Talk it through in Claude</b>
+          <span class="muted small">Attach the pack and add what the recording can't show: why you built this, what went wrong, what fixed it, your hardware and versions. Claude may ask a few questions, then ends its reply with a code block.</span>
+        </li>
+        <li>
+          <b>Paste Claude's reply</b>
+          <span class="muted small">The whole message is fine. Or open the <code>stepcrumbs-reply.json</code> file if Claude made one.</span>
+          <textarea id="cReply" rows="6" spellcheck="false" placeholder="Paste Claude's reply here"></textarea>
+          <label class="check"><input id="cOverwrite" type="checkbox"> Let Claude replace text I edited myself</label>
+          <div class="row gap wrap">
+            <button type="button" id="cApply" class="btn primary">Apply to my guide</button>
+            <label class="btn"><input id="cReplyFile" type="file" accept=".json,.txt,.md,application/json,text/plain" hidden>Open reply file</label>
+            <button type="button" id="cUndo" class="btn ghost hidden">Undo last import</button>
+          </div>
+          <p id="cResult" class="small" role="status"></p>
+        </li>
+      </ol>
+      <details class="trouble">
+        <summary>Writing preferences</summary>
+        <div class="grid2">
+          <div><label class="lbl" for="cVoice">Writing voice</label>
+            <select id="cVoice"><option value="friendly">Friendly, first person (LinkedIn / blog)</option><option value="formal">Neutral and formal (company SOP)</option></select></div>
+        </div>
+        <label class="lbl" for="cStyle">Make it sound like me <span class="muted" style="font-weight:500">optional: paste a post you wrote yourself</span></label>
+        <textarea id="cStyle" rows="3" placeholder="Paste one of your own LinkedIn posts. Claude copies your tone, not your words."></textarea>
+      </details>
+      <div class="row end gap" style="margin-top:14px">
+        <button class="btn" value="close">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="busy" class="busy hidden"><div class="spinner"></div><span id="busyText">Working…</span></div>
+  <div id="toast" class="toast"><span id="toastText"></span><button id="toastUndo">Undo</button></div>
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

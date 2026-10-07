@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to StepCrumbs</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="base.css">
+  <style>
+    .wrap { max-width: 860px; margin: 0 auto; padding: 48px 20px 80px; }
+    .hero { display: flex; gap: 18px; align-items: center; }
+    .hero img { width: 64px; height: 64px; }
+    h1 { font-size: 34px; letter-spacing: -.02em; margin: 0; }
+    .lede { color: var(--muted); font-size: 17px; margin: 6px 0 0; }
+    ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 32px 0; display: grid; gap: 12px; }
+    ol.steps li { counter-increment: s; position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 14px 60px; box-shadow: var(--shadow); }
+    ol.steps li::before { content: counter(s); position: absolute; left: 16px; top: 14px; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 800; display: grid; place-items: center; }
+    ol.steps li > b { display: block; font-size: 15.5px; margin-bottom: 2px; }
+    ol.steps li > span { color: var(--muted); }
+    h2 { font-size: 20px; margin: 36px 0 10px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { white-space: nowrap; width: 1%; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .card h3 { margin: 0 0 6px; font-size: 15px; }
+    .card p, .card ul { margin: 0; color: var(--muted); font-size: 13.5px; }
+    .card ul { padding-left: 18px; }
+    @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <img src="icons/icon128.png" alt="">
+      <div>
+        <h1>StepCrumbs is ready</h1>
+        <p class="lede">Leave a trail of crumbs as you work: every click, field and command becomes a step in a guide you can post to LinkedIn or your website. Free and local.</p>
+      </div>
+    </div>
+
+    <ol class="steps">
+      <li><b>Pin the icon</b><span>Click the puzzle-piece icon in the toolbar, then the pin next to <i>StepCrumbs</i>.</span></li>
+      <li><b>Open what you're working in, then the side panel</b><span>Proxmox, the AWS Console, Azure, GitHub, your router… any web UI. Click the StepCrumbs icon and the panel opens on the right.</span></li>
+      <li><b>Create a project and press Start recording</b><span>Give it a name like “3-node Proxmox cluster” or “Static site on S3 + CloudFront”. You can stop and come back to the same project on another day.</span></li>
+      <li><b>Work normally</b><span>Every click becomes a step with a highlighted arrow. Typing in fields and commands in browser terminals (Proxmox Shell, xterm.js-based cloud shells) are captured too. Password fields are hidden automatically, and account IDs, ARNs, keys, emails and public IPs on screen are auto-blurred. Press <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> before typing any other secret.</span></li>
+      <li><b>Log what was hard as it happens</b><span>Open the <b>Notes</b> tab: add a <i>Challenge</i> when something breaks, then a <i>Solution</i> once you fix it. They land at the right spot in your guide.</span></li>
+      <li><b>Stop, then click “Editor &amp; export”</b><span>Read through, blur what's sensitive and star the key steps.</span></li>
+      <li><b>Write it up with Claude</b><span>Click <b>Write with Claude</b> → <b>Download pack</b>. Attach the pack in Claude and tell it what the recording can't show: why you built it, what went wrong, what fixed it. Paste Claude's reply back into the same dialog, and your guide, SOP, carousel, video and web page update.</span></li>
+      <li><b>Export</b><span>A LinkedIn carousel PDF and post, a short video, a printable SOP, or a website page.</span></li>
+    </ol>
+
+    <h2>Keyboard shortcuts</h2>
+    <table>
+      <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td>Pause / resume recording</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd></td><td>Mute typing (passwords, API keys, Wi-Fi keys)</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td><td>Take a manual screenshot step (great for showing a result)</td></tr>
+      <tr><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></td><td>Jump to the Notes tab</td></tr>
+    </table>
+    <p class="muted" style="font-size:13px">To change them, open <code>chrome://extensions/shortcuts</code> (or <code>edge://extensions/shortcuts</code>).</p>
+
+    <h2>Good to know</h2>
+    <div class="grid">
+      <div class="card"><h3>Private by design</h3><p>No account, no cloud, no cost. Everything is stored in your browser on this PC. Use <b>Backup</b> in the editor to keep a copy.</p></div>
+      <div class="card"><h3>What it records</h3><ul><li>Clicks in any browser tab (incl. iframes)</li><li>Text typed into fields</li><li>Commands in xterm.js terminals and noVNC consoles</li></ul></div>
+      <div class="card"><h3>What it can't record</h3><ul><li>Apps outside the browser (PuTTY, Windows Terminal, VS Code). Use a browser shell, or add the command as a code block in the editor</li><li><code>chrome://</code> pages and the Web Store</li></ul></div>
+      <div class="card"><h3>Before you publish</h3><p>Check the <b>Privacy check</b> panel in the editor. Auto-blur catches common secrets, but glance over each screenshot for anything else (hostnames, serials, MAC addresses).</p></div>
+    </div>
+  </div>
+</body>
+</html>

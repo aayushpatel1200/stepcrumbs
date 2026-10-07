@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StepCrumbs</title>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><img src="icons/icon32.png" alt="" width="20" height="20"><span>StepCrumbs</span></div>
+    <button id="openEditor" class="btn sm primary" title="Edit, blur, crop and export"><span data-i="edit"></span>Editor &amp; export</button>
+  </header>
+
+  <section class="project">
+    <div class="row between"><label class="lbl" for="projectSel">Project</label><button id="manageProjects" class="linkbtn" type="button">Manage projects</button></div>
+    <div class="row">
+      <select id="projectSel"></select>
+      <button id="newProject" class="btn icon" title="New project" data-i="plus"></button>
+      <button id="delProject" class="btn icon" title="Delete this project" data-i="trash"></button>
+    </div>
+    <div id="newRow" class="row hidden">
+      <input id="newTitle" type="text" placeholder="e.g. Proxmox cluster, AWS VPC + EC2 web server" maxlength="120">
+      <button id="createProject" class="btn primary">Create</button>
+    </div>
+  </section>
+
+  <section class="controls card">
+    <div class="status-row">
+      <span id="status" class="status idle"><i></i><b id="statusText">Ready</b></span>
+      <span id="timer" class="timer">00:00</span>
+    </div>
+    <div class="btnrow" id="idleRow">
+      <button id="btnStart" class="btn primary big"><span data-i="rec"></span>Start recording</button>
+    </div>
+    <div class="btnrow hidden" id="liveRow">
+      <button id="btnPause" class="btn"><span data-i="pause"></span>Pause</button>
+      <button id="btnResume" class="btn hidden"><span data-i="play"></span>Resume</button>
+      <button id="btnStop" class="btn danger"><span data-i="stop"></span>Stop</button>
+    </div>
+    <div class="btnrow hidden" id="toolRow">
+      <button id="btnMute" class="btn" title="Hide what you type (Alt+Shift+M). Use it before typing passwords."><span data-i="lock"></span><span id="muteLabel">Mute typing</span></button>
+      <button id="btnSnap" class="btn" title="Take a screenshot step right now (Alt+Shift+S)"><span data-i="camera"></span>Snapshot</button>
+    </div>
+    <div class="connrow hidden" id="connRow" role="status"><i id="connDot"></i><span id="connText"></span><button id="connRetry" class="linkbtn hidden" type="button">Check again</button></div>
+    <p id="hint" class="hint muted">Click <b>Start</b>, then work in your browser as usual (Proxmox, AWS Console, GitHub…). Every click, field you type in and shell command becomes a step.</p>
+  </section>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="steps" class="active">Steps <span id="stepCount" class="count">0</span></button>
+    <button role="tab" data-tab="notes">Notes <span id="noteCount" class="count">0</span></button>
+  </nav>
+
+  <section id="tab-steps" class="tabpane">
+    <ol id="steps" class="steps"></ol>
+    <div id="stepsEmpty" class="empty muted">No steps yet. They'll show up here live while you record.</div>
+  </section>
+
+  <section id="tab-notes" class="tabpane hidden">
+    <div class="note-form card">
+      <div class="kinds" id="kinds"></div>
+      <textarea id="noteText" rows="4" placeholder="What was tricky? What error did you hit?"></textarea>
+      <div class="row between">
+        <span class="muted small">Saved at this point in your timeline · <kbd>Ctrl</kbd>+<kbd>Enter</kbd></span>
+        <button id="addNote" class="btn primary sm"><span data-i="plus"></span>Add note</button>
+      </div>
+    </div>
+    <ul id="notes" class="notes"></ul>
+    <div id="notesEmpty" class="empty muted">Log challenges and fixes as they happen. They'll appear in your guide at the exact step, and in a “Problems I hit &amp; how I fixed them” section.</div>
+  </section>
+
+  <footer class="foot">
+    <details>
+      <summary>Shortcuts &amp; settings</summary>
+      <ul class="keys">
+        <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> pause / resume</li>
+        <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> mute typing (passwords)</li>
+        <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> manual snapshot</li>
+        <li><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd> jump to notes</li>
+      </ul>
+      <label class="check"><input id="autoBlur" type="checkbox"> Auto-blur sensitive text in screenshots<span class="muted small">AWS account IDs, ARNs, access keys, emails, public IPs, long tokens</span></label>
+      <label class="lbl" for="siteFilter">Only record on (optional)</label>
+      <input id="siteFilter" type="text" placeholder="e.g. 192.168.1.10:8006, console.aws.amazon.com">
+      <p class="muted small">Comma-separated. Leave empty to record on any site.</p>
+      <label class="lbl" for="termDelay">Shell command screenshot delay (ms)</label>
+      <input id="termDelay" type="number" min="0" max="10000" step="100">
+      <p class="muted small">How long to wait after Enter so the screenshot shows the command's output.</p>
+    </details>
+  </footer>
+
+  <div id="toast" class="toast"><span id="toastText"></span><button id="toastUndo">Undo</button></div>
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

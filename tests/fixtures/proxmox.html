@@ -1,0 +1,54 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>pve - Proxmox Virtual Environment</title>
+<style>
+body{margin:0;font:13px Helvetica,Arial,sans-serif;background:#f5f5f5;color:#222}
+.hdr{height:44px;background:#fff;border-bottom:1px solid #ccc;display:flex;align-items:center;gap:10px;padding:0 10px}
+.logo{font-weight:bold;color:#e57000;font-size:18px;margin-right:auto}
+.x-btn{display:inline-flex;align-items:center;padding:6px 12px;border:1px solid #2a6db5;background:#3892d4;color:#fff;border-radius:3px;cursor:pointer;text-decoration:none}
+.wrap{display:grid;grid-template-columns:240px 1fr;height:calc(100vh - 45px)}
+.x-tree-view{background:#fff;border-right:1px solid #ccc;padding:6px}
+.x-grid-item{padding:5px 6px;cursor:pointer}.x-grid-item:hover{background:#e6f0fa}
+.x-tree-expander{display:inline-block;width:12px;color:#888}
+.main{padding:12px;overflow:auto}
+.x-tab{display:inline-block;padding:6px 12px;border:1px solid #ccc;border-bottom:0;background:#eee;cursor:pointer;margin-right:2px}
+.panel{background:#fff;border:1px solid #ccc;padding:14px;max-width:640px}
+.x-form-item{display:flex;align-items:center;margin:8px 0}
+.x-form-item-label{width:120px}
+.x-form-trigger-wrap{display:flex}
+.x-form-trigger{width:22px;border:1px solid #bbb;background:#eee;cursor:pointer;text-align:center}
+input{padding:5px;border:1px solid #bbb;width:220px}
+.x-boundlist{border:1px solid #888;background:#fff;width:244px;margin-left:120px;display:none}
+.x-boundlist-item{padding:4px 8px;cursor:pointer}.x-boundlist-item:hover{background:#dbeaf7}
+iframe{width:100%;height:260px;border:1px solid #333;margin-top:12px}
+</style></head>
+<body>
+<div class="hdr"><span class="logo">PROXMOX Virtual Environment 8.2</span>
+  <a class="x-btn" id="createvm" role="button"><span class="x-btn-inner">Create VM</span></a>
+  <a class="x-btn" role="button"><span class="x-btn-inner">Create CT</span></a>
+</div>
+<div class="wrap">
+  <div class="x-tree-view">
+    <table class="x-grid-item"><tr><td><span class="x-tree-expander">▾</span><span class="x-tree-node-text">Datacenter</span></td></tr></table>
+    <table class="x-grid-item" id="pve"><tr><td>&nbsp;&nbsp;<span class="x-tree-expander">▾</span><span class="x-tree-node-text">pve</span></td></tr></table>
+    <table class="x-grid-item"><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<span class="x-tree-node-text">100 (web01)</span></td></tr></table>
+  </div>
+  <div class="main">
+    <div><a class="x-tab"><span class="x-tab-inner">General</span></a><a class="x-tab" id="ostab"><span class="x-tab-inner">OS</span></a><a class="x-tab"><span class="x-tab-inner">System</span></a></div>
+    <div class="panel">
+      <div class="x-form-item x-field"><label class="x-form-item-label" for="vmname"><span class="x-form-item-label-text">Name:</span></label><input id="vmname"></div>
+      <div class="x-form-item x-field"><label class="x-form-item-label" for="rootpw"><span class="x-form-item-label-text">Password:</span></label><input id="rootpw" type="password"></div>
+      <div class="x-form-item x-field" id="storagefield"><label class="x-form-item-label"><span class="x-form-item-label-text">Storage:</span></label>
+        <div class="x-form-trigger-wrap"><input id="storage" readonly value="local"><div class="x-form-trigger" id="trig">▾</div></div></div>
+      <div class="x-boundlist" id="bl"><div class="x-boundlist-item">local</div><div class="x-boundlist-item" id="lvm">local-lvm</div></div>
+      <div class="x-form-item x-field x-form-type-checkbox" id="startboot"><span class="x-form-item-label" style="width:120px"></span><span class="x-form-cb-wrap-inner"><input type="checkbox" id="cb"> <label class="x-form-cb-label" for="cb">Start at boot</label></span></div>
+      <div class="x-form-item"><span class="x-form-item-label">Public IP:</span><input id="pubip" placeholder="WAN IP"></div>
+      <a class="x-btn" id="finish" role="button"><span class="x-btn-inner">Finish</span></a>
+      <iframe id="console" src="console.html?console=shell&xtermjs=1"></iframe>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById('trig').addEventListener('click',()=>{document.getElementById('bl').style.display='block'});
+document.querySelectorAll('.x-boundlist-item').forEach(i=>i.addEventListener('click',()=>{document.getElementById('storage').value=i.textContent;document.getElementById('bl').style.display='none'}));
+</script>
+</body></html>

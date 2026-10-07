@@ -1,0 +1,18 @@
+{
+  "extensionName": {
+    "message": "StepCrumbs",
+    "description": "Name of the extension."
+  },
+  "extensionShortName": {
+    "message": "StepCrumbs",
+    "description": "Short name of the extension."
+  },
+  "extensionDescription": {
+    "message": "Record clicks, typing & commands as step-by-step guides and SOPs. Write them up with Claude. Export PDFs, videos & web pages.",
+    "description": "Store and extensions-page description, 132 characters at most."
+  },
+  "actionTitle": {
+    "message": "StepCrumbs (open side panel)",
+    "description": "Toolbar button tooltip."
+  }
+}

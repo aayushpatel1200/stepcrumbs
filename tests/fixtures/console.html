@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><title>shell</title>
+<style>body{margin:0;background:#000;color:#ddd;font:14px monospace}.xterm{height:100vh;padding:6px;position:relative}
+textarea.xterm-helper-textarea{position:absolute;opacity:0;left:0;top:0;width:1px;height:1px}#out{white-space:pre}</style></head>
+<body><div class="xterm" id="term"><textarea class="xterm-helper-textarea" id="ta"></textarea><div id="out">root@pve:~# </div></div>
+<script>
+const ta=document.getElementById('ta'),out=document.getElementById('out');let line='';
+document.getElementById('term').addEventListener('mousedown',e=>{e.preventDefault();ta.focus()});
+ta.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){out.textContent+='\n'+(line.startsWith('apt')?'Hit:1 http://deb.debian.org bookworm InRelease\nReading package lists... Done':'ok')+'\nroot@pve:~# ';line='';e.preventDefault();return}
+ if(e.key==='Backspace'){line=line.slice(0,-1);out.textContent=out.textContent.slice(0,-1);e.preventDefault();return}
+ if(e.key.length===1&&!e.ctrlKey){line+=e.key;out.textContent+=e.key;e.preventDefault()}
+});
+</script></body></html>
